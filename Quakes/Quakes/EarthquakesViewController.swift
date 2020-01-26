@@ -21,7 +21,12 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
     
     var quakes: [Quake] = [] {
         didSet {
-            mapView.addAnnotations(quakes)
+            let oldQuakes = Set(oldValue)
+            let newQuakes = Set(quakes)
+            let addedQuakes = Array(newQuakes.subtracting(oldQuakes))
+            let removedQuakes = Array(oldQuakes.subtracting(newQuakes))
+            mapView.removeAnnotations(removedQuakes)
+            mapView.addAnnotations(addedQuakes)
         }
     }
 	
