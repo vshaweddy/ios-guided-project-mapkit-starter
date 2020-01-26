@@ -10,11 +10,12 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class EarthquakesViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
 		
 	// NOTE: You need to import MapKit to link to MKMapView
 	@IBOutlet var mapView: MKMapView!
     
+    private let quakeFetcher = QuakeFetcher()
     private let locationManager = CLLocationManager()
     private var userTrackingButton: MKUserTrackingButton!
 	
@@ -37,6 +38,18 @@ class EarthquakesViewController: UIViewController, MKMapViewDelegate, CLLocation
         }
 	}
     
+    func fetchQuakes() {
+        let visibleRegion = mapView.visibleMapRect
+        
+        quakeFetcher.fetchQuakes(in: visibleRegion) { (quakes, error) in
+            if let error = error {
+                NSLog("Error fetching quakes: \(error)")
+            }
+            
+            print(quakes)
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         mapView.setCenter(userLocation.coordinate, animated: true)
     }
@@ -46,5 +59,11 @@ class EarthquakesViewController: UIViewController, MKMapViewDelegate, CLLocation
             locationManager.startUpdatingLocation()
             locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
         }
+    }
+}
+
+extension EarthquakesViewController: MKMapViewDelegate {
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        self.fetchQuakes()
     }
 }
