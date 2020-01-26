@@ -31,7 +31,9 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    // one request at a time
     var isCurrentlyFetchingQuakes = false
+    var shouldRequestQuakeAgain = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -57,7 +59,13 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
 	}
     
     func fetchQuakes() {
-        guard !isCurrentlyFetchingQuakes else { return }
+        // If we were already requesting quakes
+        guard !isCurrentlyFetchingQuakes else {
+            // ... then we want to "remember to refresh once we finish
+            shouldRequestQuakeAgain = false
+            
+            return
+        }
         
         isCurrentlyFetchingQuakes = true
         let visibleRegion = mapView.visibleMapRect
@@ -69,7 +77,15 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
                 NSLog("Error fetching quakes: \(error)")
             }
             
-            self.quakes = quakes ?? []
+            // so it won't hide the quakes, when we're getting back empty quakes
+            if let quakes = quakes {
+                self.quakes = quakes
+            }
+            
+            if self.shouldRequestQuakeAgain {
+                self.shouldRequestQuakeAgain = false
+                self.fetchQuakes()
+            }
         }
     }
     
