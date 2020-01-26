@@ -18,6 +18,7 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
     private let quakeFetcher = QuakeFetcher()
     private let locationManager = CLLocationManager()
     private var userTrackingButton: MKUserTrackingButton!
+    private let annotationReuseIdentifier = "QuakeAnnotationView"
     
     var quakes: [Quake] = [] {
         didSet {
@@ -39,6 +40,8 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
         
         userTrackingButton.leftAnchor.constraint(equalTo: mapView.leftAnchor, constant: 20.0).isActive = true
         userTrackingButton.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -20.0).isActive = true
+        
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: annotationReuseIdentifier)
         
         fetchQuakes()
         
@@ -63,10 +66,6 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        mapView.setCenter(userLocation.coordinate, animated: true)
-    }
-    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
@@ -78,5 +77,16 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
 extension EarthquakesViewController: MKMapViewDelegate {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         self.fetchQuakes()
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let quake = annotation as? Quake else { return nil }
+        
+        guard let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationReuseIdentifier, for: quake) as? MKMarkerAnnotationView else {
+            fatalError("Missing registered map annotation view")
+        }
+        
+        
+        return annotationView
     }
 }

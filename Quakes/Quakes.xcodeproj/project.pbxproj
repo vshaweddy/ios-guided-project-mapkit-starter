@@ -19,6 +19,7 @@
 		E33F034723DD1AFF00F9AEA1 /* Quake.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F034623DD1AFF00F9AEA1 /* Quake.swift */; };
 		E33F034923DD1BB100F9AEA1 /* QuakeFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F034823DD1BB100F9AEA1 /* QuakeFetcher.swift */; };
 		E33F034B23DD1BE000F9AEA1 /* CoordinateRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F034A23DD1BE000F9AEA1 /* CoordinateRegion.swift */; };
+		E33F034C23DD363500F9AEA1 /* QuakeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD482541236B3C4F00FC12E9 /* QuakeDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -223,6 +224,7 @@
 				BD48251A236B3B6600FC12E9 /* AppDelegate.swift in Sources */,
 				E33F034723DD1AFF00F9AEA1 /* Quake.swift in Sources */,
 				BD48253C236B3BD500FC12E9 /* EarthquakesViewController.swift in Sources */,
+				E33F034C23DD363500F9AEA1 /* QuakeDetailView.swift in Sources */,
 				BD48251C236B3B6600FC12E9 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -42,7 +42,7 @@ class QuakeDetailView: UIView {
     
     private func updateSubviews() {
         guard let quake = quake else { return }
-        let magnitude = quake.mag
+        let magnitude = quake.magnitude
         magnitudeLabel.text = String(magnitude) + " magnitude"
         dateLabel.text = dateFormatter.string(from: quake.time)
         latitudeLabel.text = "Lat: " + latLonFormatter.string(from: quake.coordinate.latitude as NSNumber)!
