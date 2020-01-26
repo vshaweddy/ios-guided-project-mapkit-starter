@@ -18,6 +18,12 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
     private let quakeFetcher = QuakeFetcher()
     private let locationManager = CLLocationManager()
     private var userTrackingButton: MKUserTrackingButton!
+    
+    var quakes: [Quake] = [] {
+        didSet {
+            mapView.addAnnotations(quakes)
+        }
+    }
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -28,6 +34,8 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
         
         userTrackingButton.leftAnchor.constraint(equalTo: mapView.leftAnchor, constant: 20.0).isActive = true
         userTrackingButton.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -20.0).isActive = true
+        
+        fetchQuakes()
         
         self.mapView.showsUserLocation = true
         mapView.delegate = self
@@ -46,7 +54,7 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
                 NSLog("Error fetching quakes: \(error)")
             }
             
-            print(quakes)
+            self.quakes = quakes ?? []
         }
     }
     
