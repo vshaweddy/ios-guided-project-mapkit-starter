@@ -86,6 +86,13 @@ extension EarthquakesViewController: MKMapViewDelegate {
             fatalError("Missing registered map annotation view")
         }
         
+        annotationView.glyphImage = #imageLiteral(resourceName: "QuakeIcon") // UIImage(named: "QuakeIcon")
+        
+        annotationView.canShowCallout = true
+        let detailView = QuakeDetailView()
+        detailView.quake = quake
+        annotationView.detailCalloutAccessoryView = detailView
+        
         
         return annotationView
     }
