@@ -30,6 +30,8 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
             mapView.addAnnotations(addedQuakes)
         }
     }
+    
+    var isCurrentlyFetchingQuakes = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -55,9 +57,14 @@ class EarthquakesViewController: UIViewController, CLLocationManagerDelegate {
 	}
     
     func fetchQuakes() {
+        guard !isCurrentlyFetchingQuakes else { return }
+        
+        isCurrentlyFetchingQuakes = true
         let visibleRegion = mapView.visibleMapRect
         
         quakeFetcher.fetchQuakes(in: visibleRegion) { (quakes, error) in
+            self.isCurrentlyFetchingQuakes = false
+            
             if let error = error {
                 NSLog("Error fetching quakes: \(error)")
             }
@@ -88,6 +95,17 @@ extension EarthquakesViewController: MKMapViewDelegate {
         
         annotationView.glyphImage = #imageLiteral(resourceName: "QuakeIcon") // UIImage(named: "QuakeIcon")
         
+        if quake.magnitude >= 7 {
+            annotationView.markerTintColor = .systemPurple
+        } else if quake.magnitude >= 5 {
+            annotationView.markerTintColor = #colorLiteral(red: 0.9409348369, green: 0.238632679, blue: 0.2713032067, alpha: 1)
+        } else if quake.magnitude >= 3 {
+            annotationView.markerTintColor = .systemOrange
+        } else {
+            annotationView.markerTintColor = .systemYellow
+        }
+        
+        // Popup
         annotationView.canShowCallout = true
         let detailView = QuakeDetailView()
         detailView.quake = quake
